@@ -1,0 +1,112 @@
+var randLength;
+
+var randWidth;
+
+var blockSprite;
+
+var blocks = [];
+
+class block {
+    block() {
+        
+    }
+    renderNew() {
+        randLength = Randomizer.nextInt(5, 30);
+        randWidth = Randomizer.nextInt(30, 60);
+        
+        
+        blockSprite = new Rectangle(randLength, randWidth);
+        
+        var bSRenderX = getWidth() - blockSprite.getWidth();
+
+        var bSRenderY = getHeight() - blockSprite.getHeight();
+        
+        blockSprite.setPosition(bSRenderX, bSRenderY);
+        blockSprite.setColor(Color.RED);
+        add(blockSprite);
+        blocks.push(blockSprite);
+    }
+}
+
+var player = new Rectangle(20, 20);
+player.setPosition(100, 460);
+player.setColor(Color.CYAN);
+add(player);
+
+var vy = 0;
+
+
+var wPressed;
+
+function stop() {
+    stopTimer(consolidate)
+}
+function yMove(e) {
+    if((e.keyCode == Keyboard.letter('W')) && (player.getY() == 460)) {
+        vy = -20;
+        wPressed = true;
+    }
+}
+var tick = 0;
+function gravity() {
+    if(player.getY() < 460) {
+        vy += 2
+    } else if((player.getY() > 460) && (wPressed == false)){
+        player.setPosition(player.getX(), getHeight() - 20);
+        vy = 0;
+    }
+    player.move(0, vy);
+    wPressed = false;
+      if(getElementAt(player.getX() + 10, player.getY() - 10) != null) {
+          stop();
+      }
+}
+function move() {
+    keyDownMethod(yMove);
+}
+var blocksNum = 1;
+var obstacle = new block();
+function spawnBlocks() {
+    for(var i = 0; i < blocks.length; i++) {
+        if(blocks[i].getX() < -(blocks[i].getWidth())) {
+            blocks.remove(i);
+            obstacle.renderNew();
+            blocksNum++;
+        }
+    }
+    for(var i = 0; i < blocks.length; i++) {
+        blocks[i].move(-4 - (0.08 * blocksNum), 0);
+    }
+}
+function consolidate() {
+    spawnBlocks();
+    gravity();
+    keyDownMethod(yMove);
+}
+    var countdown = 3
+    var countDone = false;
+function wait() {
+    if(countdown > 0) {
+        var clear = new Rectangle(50, 30);
+        clear.setPosition(getHeight() / 2 - 30, getWidth() / 2 - 30);
+        clear.setColor(Color.WHITE);
+        add(clear);
+        var count = new Text(countdown, "12pt Arial");
+        count.setPosition(getHeight() / 2 - count.getHeight() / 2, getWidth() / 2 - count.getWidth() / 2);
+        add(count);
+        countdown--;
+        println(countdown);
+    } else {
+        countDone = true;
+    }
+}
+function main() {
+    
+        add(player);
+        var obstacle = new block();
+        obstacle.renderNew();
+        setTimer(consolidate, 5);
+}
+function start(e) {
+    mouseClickMethod(main);
+}
