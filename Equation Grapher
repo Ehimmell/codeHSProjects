@@ -1,0 +1,159 @@
+var INPUT_STRING = readLine("freeform equation- ");
+
+function getTerms() {
+    
+    var x;
+
+    var remaining = INPUT_STRING;
+
+    var terms = [];
+
+    var term;
+
+    while(remaining.indexOf("x") != -1) {
+        x = remaining.indexOf("x");
+        
+        if(remaining.substring((x + 1), (x + 2)) == "^") {
+            term = remaining.substring((x - 2), (x + 3));
+            remaining = remaining.substring((x + 3), (remaining.length + 1));
+        } else {
+            term = remaining.substring((x - 2), (x + 1));
+            remaining = remaining.substring((x + 1), (remaining.length + 1));
+        }
+        
+        terms.push(term);
+    }
+    
+    if(remaining.length != 0) terms.push(remaining);
+    
+    println("terms- " + terms);
+    
+    return terms;
+}
+
+function getPowers() {
+    var terms = getTerms();
+    
+    var powers = [];
+    
+    for(var i = 0; i < terms.length; i++) {
+        if((terms[i].indexOf("x") != -1) && (terms[i].indexOf("^") != -1)) {
+            powers.push(terms[i].substring((terms[i].indexOf("x")), (terms[i].length + 1)));
+        } else if(terms[i].indexOf("x") != -1) {
+            powers.push("x");
+        } else {
+            powers.push("1");
+        }
+    }
+    
+    println("powers- " + powers);
+    
+    return powers;
+}
+
+function getFunctionalPowers() {
+    var powers = getPowers();
+    
+    var functionalPowers = [];
+    
+    var power;
+    
+    for(var i = 0; i < powers.length; i++) {
+        if(powers[i].length > 1) {
+            power = parseFloat(powers[i].substring(2, powers[i].length));
+        } else if(powers[i].indexOf("x") != -1) {
+            power = 1;
+        } else {
+            power = null;
+        }
+        
+        functionalPowers.push(power);
+        
+    }
+    
+    println(powers);
+    
+    return functionalPowers;
+}
+
+function getConstants() {
+    var terms = getTerms();
+    
+    var constants = [];
+    
+    var constant = 0;;
+    
+    for(var i = 0; i < terms.length; i++) {
+        if(terms[i].indexOf("x") != -1) {
+            if(terms[i].substring(0,1) == "-"){
+                if(terms[i].substring(1,2) == "x") {
+                    constant = -1;
+                } else {
+                    constant = parseFloat(terms[i].substring(0, 2)); 
+                }
+            } else if(terms[i].substring(0,1) == "x") {
+                constant = 1;
+            } else {
+                constant = parseFloat(terms[i].substring(0,1));
+            }
+        } else {
+            constant = parseFloat(terms[i]);
+        }
+        
+        constants.push(constant);
+    }
+    
+    println(constants);
+    
+    return constants;
+}
+
+function computeVals() {
+    var constants = getConstants();
+    
+    var powers = getFunctionalPowers();
+    
+    var terms = getTerms();
+    
+    var val = 0;
+    
+    var vals = [];
+    
+    println("powers " + powers);
+    
+    println("constants " + constants );
+    
+    for(var x = -20; x < 20; x+= 0.5) {
+        for(var i = 0; i < terms.length; i++ ) {
+            if(powers[i] != null) {
+                var constant = constants[i];
+                var xVal = Math.pow(x, powers[i]);
+                val += xVal * constant;
+            } else {
+                val += constants[i];
+            }
+        }
+        
+        vals.push(val);
+        val = 0;
+        
+    }
+    
+    println(vals);
+    
+    return vals;
+}
+
+function draw() {
+    var vals = computeVals();
+    
+    for(var i = 0; i < vals.length; i++) {
+        var newCircle = new Circle(2);
+        newCircle.setPosition(i * 8 + getWidth() / 2 -320, (-(vals[i]) + getHeight() / 2));
+        add(newCircle);
+    }
+}
+function start() {
+draw();
+
+}
