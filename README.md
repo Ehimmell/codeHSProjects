@@ -1,7 +1,7 @@
 # codeHSProjects
 Old (Like, really old) projects I built on the sandbox of an educational coding website, CodeHS, when I was first learning Java/JavaScript. Nothing on here is close to optimized so please cut me some slack.
 
-A lot of this is just stuff I want to remember, as it was built using codeHS's libraries and IDE that I have no access to anymore.
+A lot of this is just stuff I want to remember, as it was built using codeHS's libraries and IDE which I have no access to anymore.
 
 Some cool projects include:
 
