@@ -1,0 +1,191 @@
+var one = false;
+var two = false;
+function addText(x, y, font, text) {
+    var newText = new Text(text, font);
+    newText.setPosition(x, y);
+    add(newText);
+}
+function addRect(l, w, x, y, color) {
+    var newRect = new Rectangle(l, w);
+    newRect.setPosition(x, y);
+    newRect.setColor(color);
+    add(newRect);
+}
+var valid;
+function scanBox(e) {
+    var x = e.getX();
+    var y = e.getY();
+    if((x > 40) && (x < 180) && (y > 130) && (y < 220) && (valid == true)) {
+        transToRootsMenu();
+        
+        one = true;
+        
+        valid = false;
+        
+    } else if ((y > getHeight() - 40) && (x < 70)){
+        
+        makeStart();
+        
+        valid = true;
+        
+        one = false;
+        two= false;
+        
+    } else if ((x > getWidth() / 2 - 80) && (x < getWidth() / 2 + 80) && 
+    (y > getHeight() / 2) && (y < getHeight() / 2 + 80) && (valid == false)) {
+        if(one == true) {
+            transToRoots();
+        
+            valid = false;
+            
+            one = false;
+        } else if (two == true) {
+            
+            
+            
+        }
+        
+        
+    } else if((x > 220) && (x < 360) && (y > 130) && (y < 220) && (valid == true)) {
+        numberInfoMenu();
+        
+        two = true;
+        
+        valid = false;
+    }
+}
+function getMouseCoords(e) {
+    println(e.getX());
+    println(e.getY());
+    println("");
+}
+function numberInfoMenu() {
+    addRect(getWidth(), getHeight(), 0, 0, Color.WHITE);
+    addRect(80, 40, 0, getHeight() - 40, Color.RED);
+    addText(17, getHeight() - 15, "12pt Arial", "BACK");
+    addRect(160, 80, getWidth() / 2 - 80, getHeight() / 2, Color.CYAN);
+    addText(getWidth() / 2 - 48, getHeight() / 2 + 30, "20pt Arial", "START!");
+    addText(10, 40, "20pt Arial", "Number Info Calculator");
+    addText(10, 60, "10pt Arial", "This function gives the following info on numbers:");
+    addText(10, 80, "10pt Arial", "Factor pairs, prime number or not, and square root.");
+    addText(10, 100, "10pt Arial", "Go easy on the 0's though, this code runs on an");
+    addText(10, 120, "10pt Arial", "algorithm that does not effeciently process inputs");
+    addText(10, 140, "10pt Arial", "over one trillion.");
+}
+function transToRootsMenu() {
+    addRect(getWidth(), getHeight(), 0, 0, Color.WHITE);
+    addRect(80, 40, 0, getHeight() - 40, Color.RED);
+    addText(17, getHeight() - 15, "12pt Arial", "BACK");
+    addRect(160, 80, getWidth() / 2 - 80, getHeight() / 2, Color.CYAN);
+    addText(getWidth() / 2 - 48, getHeight() / 2 + 30, "20pt Arial", "START!");
+    addText(10, 40, "20pt Arial", "Quadratic Factoring Calculator");
+    addText(10, 60, "10pt Arial", "This function takes a factorable quadratic equation, factors");
+    addText(10, 80, "10pt Arial", "it, and return two factor pairs and two roots.");
+    addText(10, 140, "10pt Arial", "The program will ask for three values: the coefficent of a");
+    addText(10, 160, "10pt Arial", "quadratic variable, the coefficent of a variable, and");
+    addText(10, 180, "10pt Arial", "a constant. Simply put in numerical values for these inputs.");
+    
+    
+}
+function transToRoots() {
+        addRect(getWidth(), getHeight(), 0, 0, Color.CYAN);
+        addRect(80, 40, 0, getHeight() - 40, Color.RED);
+        addText(17, getHeight() - 15, "12pt Arial", "BACK");
+    var INPUT_S = readInt("Squared Term:   ");
+    var INPUT_X = readInt("X Term:    ");
+    var INPUT_C = readInt("Constant:    ");
+    var quadQuos = [];
+    var quadDivs = [];
+    var conQuos = [];
+    var conDivs = [];
+    
+    var quadRead = Math.abs(INPUT_S);
+    var conRead = Math.abs(INPUT_C);
+    
+    for (var i = 0; i < quadRead + 1; i++) {
+        if(quadRead % i == 0) {
+            quadQuos.push(INPUT_S/ i);
+            quadDivs.push(i);
+            quadQuos.push(-(INPUT_S / i));
+            if(INPUT_S < 0) {
+                quadQuos.push(-(INPUT_S / i));
+                quadDivs.push(-i);
+            }
+            
+        }
+    } if(conRead != 0) {
+        for (var i = 0; i < conRead + 1; i++) {
+            if(conRead % i == 0) {
+                conQuos.push(INPUT_C/ i);
+                conDivs.push(i);
+                conQuos.push(-(INPUT_C / i));
+                conDivs.push(-i);
+            }
+        }
+    }
+    var tick = 0;
+    while(tick == 0) {
+        
+        var sLen = quadQuos.length;
+        var cLen = conQuos.length;
+        var r1 = Randomizer.nextInt(0, sLen - 1);
+        var r2 = Randomizer.nextInt(0, cLen - 1);
+        
+        var x = {t1: quadDivs[r1], t2: quadQuos[r1]};
+        
+        var c = {t1: conDivs[r2], t2: conQuos[r2]};
+        
+            var s1 = x.t1 * c.t2;
+            var s2 = x.t2 * c.t1;
+            var simplified = s1 + s2;
+            var cSimp = c.t1 * c.t2;
+        
+            var root1 = -(c.t1 / x.t1);
+            var root2 = -(c.t2 / x.t2);
+            var sR1 = (Math.abs(root1) * Math.abs(root1)) * INPUT_S;
+            var sR2 = (Math.abs(root2) * Math.abs(root2)) * INPUT_S;
+        
+            var multX1 = INPUT_X * root1;
+            var multX2 = INPUT_X * root2;
+            var sumOf1 = sR1 + multX1;
+            var sumOf2 = sR2 + multX2;
+            
+            var one = sumOf1 + INPUT_C;
+            var two = sumOf2 + INPUT_C;
+            if((simplified == INPUT_X) && (cSimp == INPUT_C) && (one == 0) && (two == 0)){
+                if(x.t1 && x.t2 < 0) {
+                    x.t1 = Math.abs(x.t1);
+                    x.t2 = Math.abs(x.t2);
+                }
+                addText(5, getHeight() / 2 - 50, "12pt Arial", "Factor Pairs:")
+                addText(
+                    5, 
+                    getHeight() / 2, 
+                    "20pt Arial", 
+                    "(" + x.t1 + ", " + c.t1 + ")("+ x.t2 + ", " + c.t2 + ")"
+                );
+                addText(5, 65, "20pt Arial", "Root one: " + root1);
+                addText(5, 115, "20pt Arial", "Root two: " + root2);
+                println("Root two: " + root2);
+                tick++;
+            }
+    }
+}
+function makeStart() {
+    addRect(getWidth(), getHeight(), 0, 0, Color.WHITE);
+    addRect(80, 40, 0, getHeight() - 40, Color.RED);
+    addText(17, getHeight() - 15, "12pt Arial", "BACK");
+    addText(10, 50, "30pt Arial", "Factoring Interface");
+    addRect(140, 90, 40, 130, Color.BLUE);
+    addRect(140, 90, getWidth() - 180, 130, Color.BLUE);
+    addText(70, 150, "12pt Arial", "Quadratic");
+    addText(70, 180, "12pt Arial", "Factoring");
+    addText(getWidth() - 155, 150, "12pt Arial", "Number Info");
+    addRect(80, 40, 0, getHeight() - 40, Color.RED);
+    addText(17, getHeight() - 15, "12pt Arial", "BACK");
+    valid = true;
+    mouseClickMethod(scanBox);
+}
+function start() {
+    makeStart();
+}
