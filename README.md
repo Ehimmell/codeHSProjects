@@ -12,3 +12,5 @@ A scroller game
 An algorithm that factors a given equation (e.g. x^2 - 1 to (x-1)(x+1)
 
 An Akinator-like algorithm that uses questions to determine the user's character out of the various characters in an array (Very advanced, I know) that uses a sort-of neural network concept
+
+A program that tells you facts about a number (e.g. if it can be divided by certain numbers, etc.)
