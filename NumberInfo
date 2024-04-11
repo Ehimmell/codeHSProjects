@@ -1,0 +1,119 @@
+var USER_INPUT = readInt("What number should this read? Note: Code is not effecient enough to process numbers over 10000000000- ");
+var numFactors = [];
+var numQuotients = [];
+var evenVsOdd = USER_INPUT %2;
+function factors () {
+    
+    for (var i = 0; i < USER_INPUT; i++) {
+        if(USER_INPUT % i == 0) {
+            
+            var factorText = new Text("Factor Pair: (" + i + ", " + USER_INPUT / i + ")", "8pt Arial");
+
+            numFactors.push(i); 
+            
+            factorText.setPosition(10, numFactors.length * 13 + 60);
+            
+            add(factorText);
+        }
+    }
+    if(numFactors.length < 2){
+        
+        var prime = new Text("Prime Number", "20pt Arial");
+            prime.setPosition(200, 35);
+            add(prime);
+        
+    }
+}
+function sqrt() {
+    
+    var sQRT = new Text("SQRT: ", "15pt Arial");
+        sQRT.setPosition(290, 118)
+        add(sQRT);
+    
+    
+    
+    var sq = Math.sqrt(USER_INPUT);
+    
+    if(sq != NaN) {
+        
+        var sqa = new Text(sq, "8 point Arial");
+        sqa.setPosition(290, 158);
+        add(sqa);
+        
+    } else {
+        
+        println("Irrational root");
+        
+    }
+}
+function divis() {
+    
+    for (var j = 2; j< 21; j++) {
+        var rem = USER_INPUT % j;
+        if(rem == 0) {
+            if(j != USER_INPUT) {
+            
+                numQuotients.push(j);
+            
+                var divisBy = new Text("Divisible by " + j, "8pt Arial");
+                divisBy.setPosition(190, numQuotients.length * 13 + 60);
+                add(divisBy);
+            }
+            
+        } 
+    }
+}
+function evenOdd() {
+    
+    if(evenVsOdd == 0 ) {
+        
+        var even = new Text("Even", "15pt Arial");
+        even.setPosition(290, 78);
+        add(even);
+        println("good");
+        
+    } else if(evenVsOdd != 0) {
+        
+        var odd = new Text("Odd", "15pt Arial");
+        odd.setPosition(290, 78);
+        add(odd);
+        println("bad");
+        
+    }
+}
+function start() {
+    
+    var backDrop = new Rectangle(getWidth(), getHeight());
+        backDrop.setPosition(0, 0);
+        backDrop.setColor(Color.cyan);
+        add(backDrop);
+    
+    var headerLine = new Line(0, 40, getHeight(), 40);
+        headerLine.setLineWidth(5);
+        add(headerLine);
+    
+    var inputText = new Text(USER_INPUT, "30pt Arial");
+        inputText.setPosition(10, 35);
+        add(inputText);
+    
+    println("");
+    factors();
+    
+    println("");
+    sqrt();
+    
+    println("");
+    if(numFactors.length > 0) {
+        
+        divis();
+    
+    }
+    println(numFactors.length);
+    
+    println(numQuotients.length);
+    
+    println(evenVsOdd);
+    
+    evenOdd();
+    
+}
