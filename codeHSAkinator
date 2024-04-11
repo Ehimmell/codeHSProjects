@@ -1,0 +1,298 @@
+//Adding constant used in a class function
+const True = 1;
+//Constant used in conditions, number of questions
+const oQuestionsLength = 6;
+//Width of canvas
+const w = getWidth();
+//Height of canvas
+const h = getHeight();
+//Constant created to declutter and shorten some calls and conditionals
+const dKdim = getWidth() / 2 - 60;
+//Numerical value used to 'log' user input
+var indicator = 0;
+//Boolean used to signify end of user input
+var fullSet = false;
+//Numerical value used to track the number of user input instances
+var tick = 0;
+//Class used to add characters to the list below this class
+class character {
+ constructor(name, definingTrait, traits) {
+ //Name is the character's name
+ this.name = name;
+ //Defining Trait is a trait unique to a specific character
+ this.definingTrait = definingTrait;
+ /*Traits is an array containing booleans that signify
+ whether or not a character has a characteristic*/
+ this.traits = traits;
+ } getName() {
+ //Gives character name
+ return this.name;
+ } getTraitVal() {
+ //Gives a numerical value based on compliance with certain traits
+ //Numerical value used to track compliance with certain traits
+ var total = 0;
+ 
+ //Loop through all traits included in a character call
+ for(var i = 0; i < this.traits.length; i++) {
+ 
+ /*If the character has the trait(There is an instance of "True"
+ add 1 to total. I
+used a switch loop in case I wanted to add things other
+ than "True", like "Kind of". If I ever wanted to do this, it would be
+ easier to do in a switch than in an if statement */
+ switch(this.traits[i]) {
+ case "true":
+ total += True;
+ break;
+ } 
+ }
+ 
+ /*Currently will always return a whole number, but again, if I ever wante
+d to
+ integrate a "Kind of" option into the above, returning whole numbers
+ for both the character trait value and the user input trait value would m
+ake
+ the two more likely to match */
+ return Math.round(total);
+ }
+ getDefTrait() {
+ //Gives the defining trait of a character
+ return this.definingTrait;
+ }
+}
+/*Character Instances. Contains their name, unique trait, and their traits. Trait
+s
+are defined as values of "True" and "False" in an array because it is easier for
+a person
+to read and modify */
+//Walter White, "Breaking Bad"
+var mistaWhite = new character("Walter Hartwell White",
+"Lives at 308 Negra Arroya Lane",
+["false", "true", "false", "false", "true", "true"]);
+//Dr. Heinz Doofenshmirtz, "Phineas and Ferb"
+var drDoof = new character("Dr Doofenshmirtz",
+"Fights with Perry the Platypus",
+["true", "true", "true", "false", "true", "false"]);
+//Hank Schraeder, "Breaking Bad"
+var hank = new character("Hank Schraeder",
+"Collects rare minerals",
+["false", "false", "false", "false", "false", "false"]);
+//Spongebob Squarepants, "Spongebob Squarepants"
+var spongebob = new character("Spongebob Squarepants",
+"Lives in a Pineapple under the Sea",
+["false", "false", "true", "false", "false", "false"]);
+//Aubrey Graham, known professionally as Drake
+var drake = new character("Aubrey 'Drake' Graham",
+"A Canadian rapper",
+["true", "false", "false", "true", "false", "false"]);
+//Rick Sanchez, "Rick and Morty"
+var rick = new character("Rick Sanchez",
+"Invented Interdimensional Travel",
+["true", "true", "true", "true", "true", "false"]);
+//Array with all characters. Used for easy, practical parsing in for loops
+var characters = [mistaWhite, drDoof, hank, spongebob, drake, rick];
+//List of questions. In an array for easy parsing.
+var questions = ["Does your character have hair?",
+"Is your character a criminal?",
+"Is your character Animated?",
+"Does your character make music?",
+"Is your character some kind of scientist?",
+"Does your character wear glasses?"
+];
+ /*Streamlines the creation of rectangular objects. Takes in a length(l), widt
+h(w),
+ x position(x), y position(y), and color(color) and makes a rectangle with
+ these parameters without needing multiple lines and lots more characters */
+ function makeRect(l, w, x, y, color) {
+ var newRect = new Rectangle(l, w);
+ newRect.setPosition(x, y);
+ newRect.setColor(color);
+ add(newRect);
+ }
+//Prints out the trait values of every character in the characters array
+function getTraitVals() {
+ for(var i = 0; i < characters.length; i++) {
+if(characters[i].getTraitVal() <= questions.length){
+ println(characters[i].getName() + ": " + characters[i].getTraitVal());
+ }
+ }
+}
+ /*Streamlines the creation of text objects. x position(x), y position(y),
+ font(font), and text(container) and makes a rectangle with these parameters
+ without needing multiple lines and lots more characters */
+ function makeText(x, y, font, container) {
+ var newText = new Text(container, font);
+ newText.setPosition(x, y);
+ add(newText);
+ }
+ 
+ //The following functions make the blue "buttons" the user sees on the canvas
+ function _true() {
+ makeRect(120, 50, 10, 280, Color.CYAN);
+ makeText(43, 313, "20pt Arial", "True");
+ }
+ function _false() {
+ makeRect(120, 50, w - 130, 280, Color.CYAN);
+ makeText(w - 103, 313, "20pt Arial", "False");
+ }
+ function _probably() {
+ makeRect(120, 50, 10, 220, Color.CYAN);
+ makeText(26, 252, "17pt Arial", "Probably");
+ }
+ function _probablyNot() {
+ makeRect(120, 50, w - 130, 220, Color.CYAN);
+ makeText(w - 125, 252, "14pt Arial", "Probably Not");
+ }
+ 
+ /*The following functions create the "buttons" that appear when the first
+ round of user input ends*/
+ function _finalTrue() {
+ makeRect(120, 50, 10, 160, Color.CYAN);
+ makeText(43, 192, "20pt Arial", "True");
+ }
+ function _finalFalse() {
+ makeRect(120, 50, w - 130, 160, Color.CYAN);
+ makeText(w - 103, 192, "20pt Arial", "False");
+ }
+ 
+ //This function clears the canvas to be straight white
+ function startScreen() {
+ makeRect(w, h, 0, 0, Color.WHITE);
+ }
+ 
+/*This function makes the first screen the user sees and refreshes
+every time the user gives input*/
+function makeButtons() {
+ startScreen();
+ _true();
+ _false();
+ _probably();
+ _probablyNot(); 
+} 
+ /*This function makes questions on the canvas with less parameters than the
+ original makeText function */
+ function writeQuestion(question) {
+ makeButtons();
+ makeText(10, 50, "12pt Arial", question);
+ }
+ 
+/*This function is "where the magic happens." It contains if statements to analyz
+e user input,
+algorithms to manipulate output, and for loops that scan if the user nput is simi
+lar to
+the traits of a character */
+function scan(e) {
+ 
+ //User input x coordinate
+ var x = e.getX();
+ 
+ //User input y coordinate
+ var y = e.getY();
+ 
+ /*The below if statements check the user input mouse coordinates to see if th
+e user
+ clicked one of the "buttons." If the user did click a button, than the code w
+ill change
+ a couple tracker variables, print the changed user input value to the console
+, and
+ clear the screen and write the next quetsion in the quetsions array */
+ if(tick != questions.length) {
+ //Probably Not
+ if((x > w - 130) && (x < w - 10) &&
+ (y > 220) && (y < 270)) {
+ //Adding to input value
+ indicator += 0.2;
+ //Increasing # of questions answered
+ tick++;
+ //Printing user input value
+ println(indicator);
+ //If there are still questions to answer, print the next one
+ if(tick != oQuestionsLength) writeQuestion(questions[tick]);
+ }
+ //False
+ else if((x > w - 130) && (x < w - 10) &&
+ (y > 280) && (y < 330)) {
+ tick++;
+ println(indicator);
+ if(tick != oQuestionsLength) writeQuestion(questions[tick]);
+ }
+ //True
+ else if((x > 10) && (x < 130) &&
+ (y > 280) && (y < 330)) {
+ indicator += 1;
+ tick++;
+ println(indicator);
+ if(tick != oQuestionsLength) writeQuestion(questions[tick]);
+ }
+ //Probably
+ else if((x > 10) && (x < 130) &&
+ (y > 220) && (y < 270)) {
+ indicator += 0.75;
+ tick++;
+ println(indicator);
+ if(tick != oQuestionsLength) writeQuestion(questions[tick]);
+ }
+ }
+ 
+ /*If the # of questions the user has answered equals the number of questions
+make a variable
+ that starts the below algorithm true */
+ if(tick == oQuestionsLength) {
+ fullSet = true;
+ } else {
+ fullSet = false;
+ }
+ if(fullSet) {
+ //Parse through all characters
+ for(var i = 0; i < characters.length; i++) {
+ 
+ //Character trait val
+ var characterTotal = characters[i].getTraitVal();
+ //Check trait val
+ println(characters[i].getTraitVal());
+ //If user input val is equal to character trait val
+ if(Math.round(indicator) == characterTotal) {
+ //Clear screen
+ startScreen();
+ //Ask a question unique to the match character
+ makeText(10, 50, "15pt Arial", "Is this true of your character?")
+;
+ makeText(10, 80, "15pt Arial", characters[i].getDefTrait());
+ _finalTrue();
+ _finalFalse();
+ 
+ //If the user clicks true
+ if((x > 10) && (x < 130) &&
+ (y > 160) && (y < 220)){
+ startScreen();
+ 
+ //Tell the user their character's name
+ var characterIs = new Text("Your character is:", "15pt Arial"
+);
+ characterIs.setPosition(
+ getWidth() / 2 - characterIs.getWidth() / 2, 20);
+ characterIs.setColor(Color.BLACK);
+ add(characterIs);
+ var characterReveal = new Text(characters[i].getName(), "20pt Arial");
+ characterReveal.setPosition(
+ getWidth() / 2 - characterReveal.getWidth() / 2, 70);
+ add(characterReveal);
+ 
+ //If false button clicked
+ } else if ((x > w - 130) && (x < w - 10) &&
+ (y > 160) && (y < 220)) {
+ 
+//Tell the user the program couldn't guess the character
+ startScreen();
+makeText(10, 50, "15pt Arial", "Sorry, I can't guess your character!")
+ }
+ }
+ }
+ }
+}
+function start() {
+ getTraitVals();
+ makeButtons();
+ writeQuestion(questions[0]);
+ mouseDownMethod(scan);
+}
